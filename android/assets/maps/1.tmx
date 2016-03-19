@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="20" tilewidth="32" tileheight="32" nextobjectid="36">
+ <tileset firstgid="1" name="conreet" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="conreet.png" width="32" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground" width="200" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt2zEOhCAUBFC4/6W3NWZHKKRw8l5iLDBWf/JBYY4x5oELGszL/a06lw9anKhl+aCFfEC2quX7+E7tywctdvLxtCb5NyYftNA/ILP+gEw+IDvxj08+aKF/QCYfkN33lzw9tzsPkw9a6B+QyQdk8gHZ299xnf+gyYl8QIvVfsPV3sTV++DLnK2F7Ac5WAB+
+  </data>
+ </layer>
+ <objectgroup name="points">
+  <object id="1" x="89" y="100" width="41" height="41">
+   <ellipse/>
+  </object>
+  <object id="2" x="562" y="78" width="40" height="42">
+   <ellipse/>
+  </object>
+  <object id="3" x="619" y="389" width="41" height="35">
+   <ellipse/>
+  </object>
+  <object id="4" x="430" y="274" width="31" height="29">
+   <ellipse/>
+  </object>
+  <object id="5" x="282" y="471" width="40" height="41">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

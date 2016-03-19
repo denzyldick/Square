@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="conreet" tilewidth="32" tileheight="32">
+  <image source="conreet.png" width="32" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2MsKgzAURVH9/58ujgqlFh/3xDRZCwQHvYFkTxqXBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgf6yBh+uOnKEe7ejRFz36okdf9OhL9RnqcY8efdHjuMRdLX3fm61H1bqp2Zl6VK2ZnJ2lR9V66dkZelStlZ4ducWmZYu932jxVrFHLercPQ8taqXPU4tzrv7X1yLj1561aO/suWmR9W3viRZHzdxi87n/Fne61PwI1p33O+s8MT+Kp7+rV36vGcELLMoA/Q==
+  </data>
+ </layer>
+ <objectgroup name="points" width="100" height="100">
+  <object x="885" y="2456">
+   <ellipse/>
+  </object>
+  <object x="928" y="2463" width="1">
+   <ellipse/>
+  </object>
+  <object x="966" y="2475" width="1">
+   <ellipse/>
+  </object>
+  <object x="970" y="2513" width="1">
+   <ellipse/>
+  </object>
+  <object x="902" y="2545">
+   <ellipse/>
+  </object>
+  <object x="980" y="2596">
+   <ellipse/>
+  </object>
+  <object x="1037" y="2539" width="2">
+   <ellipse/>
+  </object>
+  <object x="906" y="2636">
+   <ellipse/>
+  </object>
+  <object x="1125" y="2646" height="2">
+   <ellipse/>
+  </object>
+  <object x="1328" y="2648">
+   <ellipse/>
+  </object>
+  <object x="1300" y="2758" height="1">
+   <ellipse/>
+  </object>
+  <object x="1267" y="2789">
+   <ellipse/>
+  </object>
+  <object x="1227" y="2844">
+   <ellipse/>
+  </object>
+  <object x="1171" y="2909" height="3">
+   <ellipse/>
+  </object>
+  <object x="1143" y="2949" height="6">
+   <ellipse/>
+  </object>
+  <object x="1040" y="3047" height="1">
+   <ellipse/>
+  </object>
+  <object x="758" y="3119">
+   <ellipse/>
+  </object>
+  <object x="863" y="2974" width="1">
+   <ellipse/>
+  </object>
+  <object x="829" y="2847">
+   <ellipse/>
+  </object>
+  <object x="759" y="2806">
+   <ellipse/>
+  </object>
+  <object x="656" y="2911" height="1">
+   <ellipse/>
+  </object>
+  <object x="544" y="3019">
+   <ellipse/>
+  </object>
+  <object x="500" y="3075">
+   <ellipse/>
+  </object>
+  <object x="446" y="2874">
+   <ellipse/>
+  </object>
+  <object x="570" y="2753">
+   <ellipse/>
+  </object>
+  <object x="356" y="2777">
+   <ellipse/>
+  </object>
+  <object x="228" y="2867">
+   <ellipse/>
+  </object>
+  <object x="158" y="2950" height="2">
+   <ellipse/>
+  </object>
+  <object x="239" y="3084">
+   <ellipse/>
+  </object>
+  <object x="352" y="3141">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

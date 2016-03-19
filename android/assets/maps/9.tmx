@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="conreet" tilewidth="32" tileheight="32">
+  <image source="conreet.png" width="32" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2t2OgyAQBtD2/V9604u9sSozwGC05yTNahXa8gn4s68XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAb3pvXlxnLwOZrNfqCzJZJ9rWMlkjk4dMamXbVybztc6dInOJTMZl2nE0M9p62k8/qXN2rPeUi27nW2vs6S0bKc+3yvaUR07FOP8+WKator3k0W+kvSJzjjxyesero3Lb9+WRF3mmsd3HfcY1Isf8aH3E7T1vqphjiJn9/E8eY476R08/cQ9r3Ixrdf/vMM/oPdtfzKHy92bv1/769cZ787eq/sz2O+Sxd/3UekXqPFuf4anPO3rORXq2V96brdh+lZl5jGSV7Y/yON+/NV4fvRfJaLu+l1P2ev0ueUR+d+QY7t129N16zl+flMd2OVvnaB3/ZfeWI/u3ytwpj7P1SH3ZseOsrsz3eGoevcf23hiWPVdu1dfaZ8a5wJVa43t0/uh9Vblj3/iYdX7V+9lV2dyxb3xcnUfVZ82aw1Z7eh4rxsaZrhzzZ89FK+enKn+YFgFU
+  </data>
+ </layer>
+ <objectgroup name="points" width="100" height="100">
+  <object x="75" y="2860">
+   <ellipse/>
+  </object>
+  <object x="335" y="3125" width="8" height="1">
+   <ellipse/>
+  </object>
+  <object x="339" y="2873">
+   <ellipse/>
+  </object>
+  <object x="471" y="2983">
+   <ellipse/>
+  </object>
+  <object x="745" y="2841">
+   <ellipse/>
+  </object>
+  <object x="1125" y="2940">
+   <ellipse/>
+  </object>
+  <object x="1137" y="3115">
+   <ellipse/>
+  </object>
+  <object x="1139" y="3037">
+   <ellipse/>
+  </object>
+  <object x="1465" y="3000">
+   <ellipse/>
+  </object>
+  <object x="1400" y="3105">
+   <ellipse/>
+  </object>
+  <object x="1620" y="2739">
+   <ellipse/>
+  </object>
+  <object x="1712" y="2343">
+   <ellipse/>
+  </object>
+  <object x="1523" y="2421">
+   <ellipse/>
+  </object>
+  <object x="1773" y="2091">
+   <ellipse/>
+  </object>
+  <object x="1891" y="2551" width="4">
+   <ellipse/>
+  </object>
+  <object x="1868" y="2913">
+   <ellipse/>
+  </object>
+  <object x="1787" y="2603">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

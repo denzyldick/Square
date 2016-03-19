@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="conreet" tilewidth="32" tileheight="32">
+  <image source="conreet.png" width="32" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1zEOACAIBDD5/6fdDQYXlaFNHIjb3UAYAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAnTh4vFPlrY+39NHLmnc1c1eWv/3xT5Z3FP/cY3/0oo9e3B99TMIbACc=
+  </data>
+ </layer>
+ <objectgroup name="points" width="100" height="100">
+  <object x="232" y="2994">
+   <ellipse/>
+  </object>
+  <object x="252" y="3102">
+   <ellipse/>
+  </object>
+  <object x="107" y="2973">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>
