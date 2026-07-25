@@ -1,73 +1,132 @@
 package com.denzyldick.square;
 
-
-
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Shape;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
-public class BackgroundAnimation extends Sprite {
-	
-	private ShapeRenderer shapeRenderer;
-	private final float square1Width = 400;
-	private final float square1Height = 400;
-	private final float square2Width = 300;
-	private final float square2Height = 300;
-	private float square1X, square1Y;
-	private final float angleSpeed = 60 * 0.2f;	
-	private Vector2 square1Vector = new Vector2(0,0);
-	private Pixmap pixmap;
-	private Sprite squareSprite;
-	private Sprite squareSprite2;
-	private Timer timer;
-	private float delaySeconds;
-	private float intervalSeconds;
-	float red,green,blue;
+public class BackgroundAnimation {
 
-	public BackgroundAnimation()
-	{
-		pixmap = new Pixmap(32, 32, Pixmap.Format.RGB565);
-		pixmap.setColor(Color.CYAN);
-		squareSprite = new Sprite(new Texture(pixmap));
-		squareSprite2 = new Sprite(new Texture(pixmap));
-		square1Vector.x = Gdx.graphics.getWidth()/2-square1Width;
-		square1Vector.y = Gdx.graphics.getHeight()/3;
-		squareSprite.setOrigin(square1Vector.x -(square1Width/2), square1Vector.y - (square1Height/2));
-		squareSprite2.setOrigin(square1Width/2, square1Height/2);
-	
+	private static final int SHAPE_COUNT = 8;
+	private FloatingShape[] shapes;
+	private SpriteBatch batch;
+	private Random random = new Random();
+	private float time;
+
+	private static class FloatingShape {
+		float x, y;
+		float size;
+		float vx, vy;
+		float rotation;
+		float rotationSpeed;
+		Color color;
+		Sprite sprite;
+		float baseAlpha;
+		float pulseSpeed;
 	}
 
-	public void draw(SpriteBatch spriteBatch) {
+	public BackgroundAnimation() {
+		batch = new SpriteBatch();
+		shapes = new FloatingShape[SHAPE_COUNT];
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
 
-		spriteBatch.begin();
-		
-		squareSprite.setBounds(square1Vector.x, square1Vector.y, square1Width, square1Height);
-		squareSprite.draw(spriteBatch);
-	
-		squareSprite2.setBounds(square1Vector.x+square1Width+100, square1Vector.y, square1Width, square1Height);
-		squareSprite2.draw(spriteBatch);
-		spriteBatch.end();
-	
-		update();
-	}
-	private void update()
-	{
-		squareSprite.rotate(angleSpeed * Gdx.graphics.getDeltaTime());
-		squareSprite2.rotate(-angleSpeed * Gdx.graphics.getDeltaTime());
-	}
-	
-	
-	
+		Color[] palette = {
+			new Color(0.34f, 0.69f, 0.95f, 1f),
+			new Color(0.95f, 0.35f, 0.45f, 1f),
+			new Color(0.38f, 0.82f, 0.67f, 1f),
+			new Color(0.50f, 0.75f, 1.0f, 1f),
+			new Color(1.0f, 0.50f, 0.60f, 1f),
+			new Color(0.20f, 0.80f, 0.70f, 1f),
+			new Color(0.60f, 0.45f, 0.80f, 1f),
+			new Color(1.0f, 0.80f, 0.35f, 1f)
+		};
 
+		float[] sizes = { 200, 150, 100, 130, 170, 90, 110, 80 };
+		float[] alphas = { 0.10f, 0.08f, 0.12f, 0.07f, 0.09f, 0.11f, 0.06f, 0.10f };
+
+		for (int i = 0; i < SHAPE_COUNT; i++) {
+			shapes[i] = new FloatingShape();
+			shapes[i].x = random.nextFloat() * w;
+			shapes[i].y = random.nextFloat() * h;
+			shapes[i].size = sizes[i];
+			shapes[i].vx = (random.nextFloat() - 0.5f) * 20;
+			shapes[i].vy = (random.nextFloat() - 0.5f) * 15;
+			shapes[i].rotation = random.nextFloat() * 360;
+			shapes[i].rotationSpeed = (random.nextFloat() - 0.5f) * 30;
+			shapes[i].baseAlpha = alphas[i];
+			shapes[i].pulseSpeed = 0.3f + random.nextFloat() * 0.5f;
+
+			Color c = palette[i];
+			shapes[i].color = new Color(c.r, c.g, c.b, shapes[i].baseAlpha);
+
+			boolean isCircle = (i % 2 == 0);
+			shapes[i].sprite = new Sprite(createShape(isCircle));
+		}
+	}
+
+	private Texture createShape(boolean circle) {
+		int texSize = 64;
+		Pixmap pixmap = new Pixmap(texSize, texSize, Pixmap.Format.RGBA8888);
+		pixmap.setColor(Color.WHITE);
+		if (circle) {
+			pixmap.fillCircle(texSize / 2, texSize / 2, texSize / 2);
+		} else {
+			pixmap.fillRectangle(0, 0, texSize, texSize);
+		}
+		Texture tex = new Texture(pixmap);
+		pixmap.dispose();
+		return tex;
+	}
+
+	public void draw() {
+		float dt = Gdx.graphics.getDeltaTime();
+		time += dt;
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
+
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+		batch.enableBlending();
+		batch.begin();
+
+		for (FloatingShape fs : shapes) {
+			fs.x += fs.vx * dt;
+			fs.y += fs.vy * dt;
+			fs.rotation += fs.rotationSpeed * dt;
+
+			if (fs.x < -fs.size) fs.x = w + fs.size;
+			if (fs.x > w + fs.size) fs.x = -fs.size;
+			if (fs.y < -fs.size) fs.y = h + fs.size;
+			if (fs.y > h + fs.size) fs.y = -fs.size;
+
+			float alpha = fs.baseAlpha + (float) Math.sin(time * fs.pulseSpeed) * 0.03f;
+			fs.color.a = Math.max(0.02f, Math.min(0.2f, alpha));
+			fs.sprite.setColor(fs.color);
+			fs.sprite.setOriginCenter();
+			fs.sprite.setRotation(fs.rotation);
+			fs.sprite.setBounds(
+				fs.x - fs.size / 2,
+				fs.y - fs.size / 2,
+				fs.size,
+				fs.size
+			);
+			fs.sprite.draw(batch);
+		}
+
+		batch.end();
+	}
+
+	public void dispose() {
+		for (FloatingShape fs : shapes) {
+			fs.sprite.getTexture().dispose();
+		}
+		batch.dispose();
+	}
 }

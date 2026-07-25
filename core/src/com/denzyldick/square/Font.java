@@ -1,38 +1,40 @@
 package com.denzyldick.square;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class Font {
-	private BitmapFont font;
-	private FreeTypeFontGenerator fontGenerator;
-	private int fontSize = 20;
-	private Color fontColor =  Color.RED;
-	
-	public Font()
-	{
-		fontGenerator = new FreeTypeFontGenerator(
+	private BitmapFont bodyFont;
+	private BitmapFont headingFont;
+
+	public Font() {
+		FreeTypeFontGenerator bodyGen = new FreeTypeFontGenerator(
 				Gdx.files.internal("font/font.ttf"));
-		FreeTypeFontGenerator.FreeTypeFontParameter parameters = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameters.size = 20;
-		font = fontGenerator.generateFont(parameters);
-		fontGenerator.scaleForPixelHeight(Gdx.graphics.getHeight());
-		fontGenerator.dispose();
-		font.setColor(fontColor);
+		FreeTypeFontParameter bodyParams = new FreeTypeFontParameter();
+		bodyParams.size = 28;
+		bodyFont = bodyGen.generateFont(bodyParams);
+		bodyGen.dispose();
+
+		FreeTypeFontGenerator headingGen = new FreeTypeFontGenerator(
+				Gdx.files.internal("font/cartoon.ttf"));
+		FreeTypeFontParameter headingParams = new FreeTypeFontParameter();
+		headingParams.size = 52;
+		headingFont = headingGen.generateFont(headingParams);
+		headingGen.dispose();
 	}
-	
-	public BitmapFont getFont()
-	{
-		return font;
+
+	public BitmapFont getFont() {
+		return bodyFont;
 	}
-	public void setColor(Color color)
-	{
-		this.fontColor = color;
+
+	public BitmapFont getHeadingFont() {
+		return headingFont;
 	}
-	public void dispose()
-	{
-		font.dispose();
+
+	public void dispose() {
+		bodyFont.dispose();
+		headingFont.dispose();
 	}
 }
