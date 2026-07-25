@@ -1,12 +1,13 @@
-package screens;
+package com.denzyldick.square.screens;
 
-import actors.Square;
+import com.denzyldick.square.actors.Square;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
@@ -22,9 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.denzyldick.square.Font;
+import com.denzyldick.square.GameSkin;
 import com.denzyldick.square.SoundManager;
 import com.denzyldick.square.SquareMain;
-
 
 public class GameScreen implements Screen {
 
@@ -36,25 +37,27 @@ public class GameScreen implements Screen {
     public static Integer currentLevel;
     private static SoundManager sound;
     private ShapeRenderer shape;
-    private int redDots, redDotsRemaind;
+    private int redDots, redDotsRemaining;
     private final float redDotsDiameter = 22;
     public static boolean gameRunning = false;
     private TextButton button;
     private Font font;
+    private GameSkin gameSkin;
     private Stage buttonStage;
-    public static int killtimes = 3;
+    public static int killTimes = 3;
+    private BitmapFont hudFont;
 
-    public GameScreen(SquareMain game) {
+    public GameScreen(SquareMain game, SoundManager sound, Font font, GameSkin gameSkin) {
         this.game = game;
-        sound = new SoundManager();
-        font = new Font();
-
+        this.sound = sound;
+        this.font = font;
+        this.gameSkin = gameSkin;
+        hudFont = font.getFont();
     }
 
     @Override
     public void render(float delta) {
-        // TODO Auto-generated method stub
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0.06f, 0.06f, 0.10f, 1f);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
         camera.position.set(square.squareSprite.getX(),
                 square.squareSprite.getY(), 0);
@@ -66,63 +69,51 @@ public class GameScreen implements Screen {
         renderer.render();
         renderer.getBatch().begin();
 
-
-        font.getFont().draw(renderer.getBatch(),
-                Integer.toString(redDotsRemaind) + "/"
-                        + Integer.toString(redDots),
+        String hudText = Integer.toString(redDotsRemaining) + "/"
+                + Integer.toString(redDots);
+        hudFont.setColor(Color.WHITE);
+        hudFont.draw(renderer.getBatch(), hudText,
                 renderer.getViewBounds().x + 10,
-                renderer.getViewBounds().y + renderer.getViewBounds().height
-                        - 20);
-
+                renderer.getViewBounds().y + renderer.getViewBounds().height - 20);
 
         renderer.getBatch().end();
         square.draw(renderer.getBatch());
 
-        // Render objects
         shape.setProjectionMatrix(camera.combined);
         for (MapObject object : map.getLayers().get("points").getObjects()) {
             redDots = map.getLayers().get("points").getObjects().getCount();
             if (object instanceof EllipseMapObject) {
                 Ellipse ellipse = ((EllipseMapObject) object).getEllipse();
-                shape.setColor(Color.RED);
+                shape.setColor(GameSkin.GOLD);
                 shape.begin(ShapeType.Filled);
                 shape.ellipse(ellipse.x, ellipse.y, this.redDotsDiameter,
                         this.redDotsDiameter);
                 shape.end();
                 objectCollision(ellipse, object);
-                // Check if the user has won the game
-                if (redDotsRemaind == redDots && gameRunning == true) {
+                if (redDotsRemaining == redDots && gameRunning == true) {
                     gameRunning = false;
-                    /**
-                     * Transition to new level
-                     */
-                    redDotsRemaind = 0;
+                    redDotsRemaining = 0;
                     this.dispose();
                     currentLevel++;
-                    this.wonStage();
+                    this.onLevelWon();
                     this.show();
                 }
-
             }
         }
-
     }
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
         camera = new OrthographicCamera();
-        camera.viewportWidth = width/2;
-        camera.viewportHeight = height/2;
+        camera.viewportWidth = width / 2;
+        camera.viewportHeight = height / 2;
         square.setCamera(camera);
         camera.update();
-
     }
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
-        sound.musicLoop();
+        sound.startMusic();
         gameRunning = true;
         map = new TmxMapLoader().load("maps/" + currentLevel + ".tmx");
 
@@ -132,25 +123,22 @@ public class GameScreen implements Screen {
         square.squareSprite.setPosition(100, 100);
         Gdx.input.setInputProcessor(square);
 
-        // Shape renderer
         shape = new ShapeRenderer();
 
-        // Load pause button
-        TextButtonStyle style = new TextButtonStyle();
-        style.font = font.getFont();
-        style.fontColor = Color.RED;
+        TextButtonStyle style = gameSkin.getButtonStyle();
         button = new TextButton("||", style);
+        button.pad(6, 12, 6, 12);
         button.setPosition(
                 renderer.getViewBounds().x + renderer.getViewBounds().width
-                        - button.getWidth() - 2,
+                        - button.getWidth() - 10,
                 renderer.getViewBounds().y
                         + renderer.getViewBounds().getHeight()
-                        - button.getHeight() - 2);
+                        - button.getHeight() - 10);
 
         button.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
-                sound.buttonClick();
+                sound.playButtonClick();
                 game.setScreen(game.gameMenu);
                 return true;
             }
@@ -161,98 +149,75 @@ public class GameScreen implements Screen {
     }
 
     private void objectCollision(Ellipse ellipse, MapObject object) {
-        float squareX = square.squareSprite.getX(), squareY = square.squareSprite
-                .getY(), squareWidth = square.squareSprite.getWidth(), squareHeight = square.squareSprite
-                .getHeight();
-        if (squareX > ellipse.x && squareX < ellipse.x + this.redDotsDiameter
-                && squareY > ellipse.y && squareY < ellipse.y + redDotsDiameter
+        float sqX = square.squareSprite.getX();
+        float sqY = square.squareSprite.getY();
+        float sqW = square.squareSprite.getWidth();
+        float sqH = square.squareSprite.getHeight();
 
-                || squareX + squareWidth < ellipse.x + this.redDotsDiameter
-                && squareX + squareWidth > ellipse.x && squareY > ellipse.y
-                && squareY < ellipse.y + redDotsDiameter
+        float dotX = ellipse.x;
+        float dotY = ellipse.y;
+        float dotW = this.redDotsDiameter;
+        float dotH = this.redDotsDiameter;
 
-                ||
+        float margin = 8;
 
-                squareX + squareWidth < ellipse.x + this.redDotsDiameter
-                        && squareX + squareWidth > ellipse.x
-                        && squareY + squareHeight < ellipse.y + this.redDotsDiameter
-                        && squareY + squareHeight > ellipse.y
+        boolean overlap = (sqX - margin < dotX + dotW)
+                && (sqX + sqW + margin > dotX)
+                && (sqY - margin < dotY + dotH)
+                && (sqY + sqH + margin > dotY);
 
-                ||
-
-                squareX > ellipse.x
-                        && squareX < ellipse.x + this.redDotsDiameter
-                        && squareY + squareHeight < ellipse.y + this.redDotsDiameter
-                        && squareY + squareHeight > ellipse.y
-
-                ) {
+        if (overlap) {
             ellipse.set(10000, 1000, 1, 1);
             object.setColor(Color.WHITE);
             object.setVisible(false);
             object.setOpacity(1f);
-            redDotsRemaind++;
-            sound.objectEffect();
-
+            redDotsRemaining++;
+            sound.playObject();
         }
-
     }
 
-    public static void endGame() {
+    public static void onPlayerDied() {
         Gdx.app.log("Game status", "Lost, ending game.");
-        --killtimes;
-        sound.musicLoopEnd();
-        sound.failureSound();
+        --killTimes;
+        sound.stopMusic();
+        sound.playFailure();
         game.endScreen.setCurrentLevel(currentLevel);
-
         game.setScreen(game.endScreen);
     }
 
-    public static void wonStage() {
-
+    public static void onLevelWon() {
         Gdx.app.log("Game status", "Won, ending game.");
-        killtimes = 3;
-        sound.musicLoopEnd();
-        sound.succeedEffect();
+        killTimes = 3;
+        sound.stopMusic();
+        sound.playSuccess();
         game.gameMenu.openNewLevel();
-//		game.wonScreen.setCurrentLevel(currentLevel.substring(currentLevel.length() - 1));
-//        game.setScreen(game.wonScreen);
-
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
-
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-
+        if (map != null) map.dispose();
+        if (renderer != null) renderer.dispose();
+        if (shape != null) shape.dispose();
+        if (buttonStage != null) buttonStage.dispose();
     }
 
-    public void setlevel(Integer level) {
-        // TODO Auto-generated method stub
+    public void setLevel(Integer level) {
         currentLevel = level;
-
-
     }
 
     public void restart() {
-        this.redDotsRemaind = 0;
+        this.redDotsRemaining = 0;
     }
-
 }
