@@ -4,32 +4,27 @@
 *.war
 *.ear
 hs_err_pid*
+*.hprof
 
-## GWT
-war/
-html/war/gwt_bree/
-html/gwt-unitCache/
-.apt_generated/
-html/war/WEB-INF/deploy/
-html/war/WEB-INF/classes/
-.gwt/
-gwt-unitCache/
-www-test/
-.gwt-tmp/
+## Android
 
-## Android Studio and Intellij and Android in general
+*.apk
 android/libs/armeabi/
 android/libs/armeabi-v7a/
 android/libs/x86/
 android/gen/
+com_crashlytics_export_strings.xml
+
+## IDE - IntelliJ / Android Studio
+
 .idea/
 *.ipr
 *.iws
 *.iml
 out/
-com_crashlytics_export_strings.xml
 
-## Eclipse
+## IDE - Eclipse
+
 .classpath
 .project
 .metadata
@@ -45,20 +40,21 @@ local.properties
 .externalToolBuilders/
 *.launch
 
-## NetBeans
+## IDE - NetBeans
+
 **/nbproject/private/
-build/
 nbbuild/
-dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
 
 ## Gradle
 
-.gradle
-gradle-app.setting
+.gradle/
 build/
+gradle-app.setting
 
 ## OS Specific
+
 .DS_Store
+Thumbs.db
